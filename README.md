@@ -14,9 +14,6 @@ cd ../code_generation
 
 ## If you want to do 20 completion for each sample for all the samples,
 !python3 automodel.py --name "facebook/incoder-6B" --root-dataset humaneval --lang java --temperature 0.2 --batch-size 20 --completion-limit 20 --output-dir-prefix tutorial
-or,
-## If you want to do 20 completion for each sample and take only first 5 samples,
-!python3 automodel.py --name "facebook/incoder-6B" --root-dataset humaneval --lang java --temperature 0.2 --batch-size 20 --completion-limit 20 --output-dir-prefix tutorial --input-limit 5
 
 cd ../evaluation/src
 
