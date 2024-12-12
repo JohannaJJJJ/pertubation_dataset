@@ -124,7 +124,7 @@ def make_main(args, model_name, gen_completions):
             "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
         )
         problems = problems.map(clean_sample)
-        problems.to_json("content/dataset.json")
+        problems.to_json("dataset.json")
 
 
     start_index = args.input_start_index if args.input_start_index is not None else 0
