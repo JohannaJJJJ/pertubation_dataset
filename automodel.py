@@ -11,9 +11,12 @@ from typing import List
 class Model:
     def __init__(self, name, revision, model_kwargs, tokenizer_name=None, tokenizer_revision=None):
         dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+        # self.model = AutoModelForCausalLM.from_pretrained(
+        #     name, revision=revision, torch_dtype=dtype, trust_remote_code=True, **model_kwargs
+        # ).cuda()
         self.model = AutoModelForCausalLM.from_pretrained(
-            name, revision=revision, torch_dtype=dtype, trust_remote_code=True, **model_kwargs
-        ).cuda()
+            name, revision=revision, torch_dtype=dtype, trust_remote_code=True, device_map=auto, **model_kwargs
+        )
         self.tokenizer = AutoTokenizer.from_pretrained(
             tokenizer_name or name,
             revision=tokenizer_revision or revision,
