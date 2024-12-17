@@ -15,7 +15,7 @@ class Model:
         #     name, revision=revision, torch_dtype=dtype, trust_remote_code=True, **model_kwargs
         # ).cuda()
         self.model = AutoModelForCausalLM.from_pretrained(
-            name, revision=revision, torch_dtype=dtype, trust_remote_code=True, device_map=auto, **model_kwargs
+            name, revision=revision, torch_dtype=dtype, trust_remote_code=True, device_map="auto", **model_kwargs
         )
         self.tokenizer = AutoTokenizer.from_pretrained(
             tokenizer_name or name,
