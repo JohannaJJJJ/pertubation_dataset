@@ -3,8 +3,9 @@
 !git clone https://github.com/towhidultonmoy/code_generation.git
 
 ## Install the libraries
-!pip install aiohttp numpy tqdm pytest datasets torch transformers
+!pip install  --upgrade "transformers"   "datasets"  "accelerate"  "evaluate"  "bitsandbytes"  "trl"  "peft"
 
+!pip install aiohttp numpy tqdm pytest torch
 
 cd ../code_generation
 
