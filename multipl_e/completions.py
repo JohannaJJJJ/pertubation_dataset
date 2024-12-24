@@ -6,10 +6,10 @@ from pathlib import Path
 from tqdm import tqdm
 import sys
 from typing import List
+import re
 
 DATASET_REVISION = "8a4cb75204eb3d5855a81778db6b95bfc80c9136"
 
-import re
 def clean_sample(sample):
     """Removes 'import org.javatuples.*;' and specific example comments from the code."""
     code = sample["prompt"]
@@ -17,11 +17,10 @@ def clean_sample(sample):
     # Remove 'import org.javatuples.*;'
     code = re.sub(r"import org.javatuples.*;\n", "", code)
 
-
-
     # Return the modified sample
     sample["prompt"] = code
     return sample
+
 def partial_arg_parser():
     args = argparse.ArgumentParser()
 
@@ -41,14 +40,12 @@ def partial_arg_parser():
         help="Use this flag when running from local prompts.",
     )
 
-    # Reuired when use local is passed
     args.add_argument(
         "--dataset",
         type=str,
         required="--use-local" in sys.argv,
         help="The local dataset in JSON format to get from this computer.",
     )
-    # Only required when use local is not passed
     args.add_argument(
         "--lang",
         type=str,
@@ -91,7 +88,6 @@ def partial_arg_parser():
     )
     return args
 
-
 def make_main(args, model_name, gen_completions):
 
     assert "-" not in model_name, "Model name must not have hyphens"
@@ -121,17 +117,7 @@ def make_main(args, model_name, gen_completions):
         problems = datasets.load_dataset(
             "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
         )
-        problems = problems.map(clean_sample)
-        problems.to_json("dataset.json")
 
-
-    start_index = args.input_start_index if args.input_start_index is not None else 0
-    stop_index = min(
-        len(problems),
-        start_index + args.input_limit
-        if args.input_limit is not None
-        else len(problems),
-    )
     start_index = args.input_start_index if args.input_start_index is not None else 0
     stop_index = min(
         len(problems),
@@ -177,7 +163,7 @@ def make_main(args, model_name, gen_completions):
 
     for batch in tqdm(problem_list, unit="batch"):
         new_completions = gen_completions(
-            prompts=[item["prompt"] for item in batch],
+            prompts=[clean_sample(item)["prompt"] for item in batch],  # Apply clean_sample here
             max_tokens=args.max_tokens,
             temperature=args.temperature,
             top_p=args.top_p,
@@ -206,7 +192,6 @@ def make_main(args, model_name, gen_completions):
             with gzip.open(exp_dir / f"{name}.json.gz", "wt") as f:
                 f.write(json.dumps(all_completions[name]))
 
-
 def read_completions(exp_dir, temperature, top_p, max_tokens, problem):
     problem_filename = exp_dir / f"{problem['name']}.json.gz"
     if problem_filename.exists():
@@ -226,7 +211,6 @@ def read_completions(exp_dir, temperature, top_p, max_tokens, problem):
         "stop_tokens": problem["stop_tokens"],
     }
     return (new_completions["name"], new_completions)
-
 
 def stop_at_stop_token(decoded_string, stop_tokens):
     """
