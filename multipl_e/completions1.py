@@ -7,7 +7,10 @@ from tqdm import tqdm
 import sys
 from typing import List
 import re
+from huggingface_hub import login
 
+# Log in with your Hugging Face token
+login("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")
 DATASET_REVISION = "8a4cb75204eb3d5855a81778db6b95bfc80c9136"
 
 # def clean_sample(sample):
