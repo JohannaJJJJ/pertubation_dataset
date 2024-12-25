@@ -115,7 +115,7 @@ def make_main(args, model_name, gen_completions):
             "json", data_files=args.dataset, split="train")
     else:
         problems = datasets.load_dataset(
-            "Towhidul", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
+            "Dataset678", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
         )
 
     start_index = args.input_start_index if args.input_start_index is not None else 0
