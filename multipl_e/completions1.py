@@ -10,16 +10,16 @@ import re
 
 DATASET_REVISION = "8a4cb75204eb3d5855a81778db6b95bfc80c9136"
 
-def clean_sample(sample):
-    """Removes 'import org.javatuples.*;' and specific example comments from the code."""
-    code = sample["prompt"]
+# def clean_sample(sample):
+#     """Removes 'import org.javatuples.*;' and specific example comments from the code."""
+#     code = sample["prompt"]
 
-    # Remove 'import org.javatuples.*;'
-    code = re.sub(r"\nimport org.javatuples.*;", "", code)
+#     # Remove 'import org.javatuples.*;'
+#     code = re.sub(r"\nimport org.javatuples.*;", "", code)
 
-    # Return the modified sample
-    sample["prompt"] = code
-    return sample
+#     # Return the modified sample
+#     sample["prompt"] = code
+#     return sample
 
 def partial_arg_parser():
     args = argparse.ArgumentParser()
@@ -115,7 +115,7 @@ def make_main(args, model_name, gen_completions):
             "json", data_files=args.dataset, split="train")
     else:
         problems = datasets.load_dataset(
-            "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
+            "Towhidul", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
         )
 
     start_index = args.input_start_index if args.input_start_index is not None else 0
@@ -163,7 +163,7 @@ def make_main(args, model_name, gen_completions):
 
     for batch in tqdm(problem_list, unit="batch"):
         new_completions = gen_completions(
-            prompts=[clean_sample(item)["prompt"] for item in batch],  # Apply clean_sample here
+            prompts=[item["prompt"] for item in batch],  # Apply clean_sample here
             max_tokens=args.max_tokens,
             temperature=args.temperature,
             top_p=args.top_p,
