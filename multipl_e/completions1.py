@@ -15,7 +15,7 @@ def clean_sample(sample):
     code = sample["prompt"]
 
     # Remove 'import org.javatuples.*;'
-    code = re.sub(r"import org.javatuples.*;\n", "", code)
+    code = re.sub(r"\nimport org.javatuples.*;", "", code)
 
     # Return the modified sample
     sample["prompt"] = code
