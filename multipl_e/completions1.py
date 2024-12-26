@@ -115,7 +115,7 @@ def make_main(args, model_name, gen_completions):
         problems = datasets.load_dataset(
             "json", data_files=args.dataset, split="train")
     else:
-        problems = datasets.load_dataset(f"Dataset678/{args.root_dataset}-{args.lang}" split="test")
+        problems = datasets.load_dataset(f"Dataset678/{args.root_dataset}-{args.lang}" ,split="test")
         # problems = datasets.load_dataset(
         #     "Dataset678/humaneval-java" ,split="test"
         # )
